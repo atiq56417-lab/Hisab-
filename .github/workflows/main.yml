@@ -1,0 +1,32 @@
+name: Build Hisab App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Code Download Karo
+      uses: actions/checkout@v4
+
+    - name: Java Setup Karo
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Gradle Setup Karo
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: App Banao (AAB)
+      run: ./gradlew bundleRelease
+
+    - name: AAB File Save Karo
+      uses: actions/upload-artifact@v4
+      with:
+        name: Hisab-App-AAB
+        path: app/build/outputs/bundle/release/*.aab
