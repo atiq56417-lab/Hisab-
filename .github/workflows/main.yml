@@ -1,4 +1,4 @@
-name: Build Hisab App
+name: Build AAB
 
 on:
   push:
@@ -8,17 +8,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Code Download Karo
-      uses: actions/checkout@v4
-
-    - name: Files Check Karo
-      run: ls -R
-
-    - name: AAB File Save Karo
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - name: Build AAB
+      run: |
+        chmod +x gradlew
+        ./gradlew bundleRelease
+    - name: Upload AAB
       uses: actions/upload-artifact@v4
       with:
-        name: Hisab-App-AAB
-        path: "**/*"
-        if-no-files-found: warn
+        name: Hisab-AAB
+        path: app/build/outputs/bundle/release/*.aab
